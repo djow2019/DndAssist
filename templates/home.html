@@ -48,6 +48,30 @@
     </div>
     <div class="text-center my-3">
         <h3>Change Initiative</h3>
+        <button type="button" class="btn btn-success my-2" onclick="updateList()">Apply Initiative</button><br>
+        <div class="row">
+            <div class="col-2">
+                <ol id="initative_chooser"></ol>
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-warning" onclick="shiftUp(0)">Up</button><br>
+                <button type="button" class="btn btn-warning" onclick="shiftUp(1)">Up</button><br>
+                <button type="button" class="btn btn-warning" onclick="shiftUp(2)">Up</button><br>
+                <button type="button" class="btn btn-warning" onclick="shiftUp(3)">Up</button><br>
+                <button type="button" class="btn btn-warning" onclick="shiftUp(4)">Up</button><br>
+                <button type="button" class="btn btn-warning" onclick="shiftUp(5)">Up</button><br>
+                <button type="button" class="btn btn-warning" onclick="shiftUp(6)">Up</button><br>
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-warning" onclick="shiftDown(0)">Down</button><br>
+                <button type="button" class="btn btn-warning" onclick="shiftDown(1)">Down</button><br>
+                <button type="button" class="btn btn-warning" onclick="shiftDown(2)">Down</button><br>
+                <button type="button" class="btn btn-warning" onclick="shiftDown(3)">Down</button><br>
+                <button type="button" class="btn btn-warning" onclick="shiftDown(4)">Down</button><br>
+                <button type="button" class="btn btn-warning" onclick="shiftDown(5)">Down</button><br>
+                <button type="button" class="btn btn-warning" onclick="shiftDown(6)">Down</button><br>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -64,9 +88,55 @@
         time = 45;
         document.getElementById("time_output").innerHTML = time;
         document.getElementById("player_turn").innerHTML = turnOrder[turnIndex];
+        setupList();
 
         setTimeout(countdown, 1000);
 
+    }
+
+    function updateList() {
+        if (!paused) {
+            pause();
+        }
+        let players = $("ol p");
+        turnOrder = [];
+        for (let i = 0; i < players.length; i++) {
+            turnOrder.push(players[i].innerHTML);
+        }
+        setTurn(turnOrder[0]);
+    }
+
+    function setupList() {
+        let el = document.getElementById("initative_chooser");
+        for (let i = 0; i < turnOrder.length; i++) {
+            let player = turnOrder[i];
+            let tmp = `<p>${player}</p>`;
+            let li = document.createElement("li");
+            li.innerHTML = tmp;
+            el.appendChild(li);
+        }
+    }
+
+    function shiftUp(index) {
+
+        if (index == 0) {
+            return;
+        }
+
+        let el = document.getElementById("initative_chooser");
+        let child = el.removeChild(el.children[index]);
+        el.insertBefore(child, el.children[index - 1]);
+    }
+
+    function shiftDown(index) {
+
+        if (index == 6) {
+            return;
+        }
+
+        let el = document.getElementById("initative_chooser");
+        let child = el.removeChild(el.children[index]);
+        el.insertBefore(child, el.children[index + 1]);
     }
     
     function setTurn(name) {
