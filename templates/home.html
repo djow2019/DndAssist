@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    output {
+        font-size: 40px;
+        color: red;
+    }
+</style>
+
+<div class="container my-3">
+    <h1 class="text-center">Dnd Assist Tool</h1>
+    <div class="text-center my-3">
+        <h3 style="display: inline">Current Turn:</h3>
+        <h3 style="display: inline" id="player_turn"></h3>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <h3 class="text-center">Players</h3>
+            <button type="button" class="btn btn-info my-2">Derek</button><br>
+            <button type="button" class="btn btn-info my-2">Keith</button><br>
+            <button type="button" class="btn btn-info my-2">Mitch</button><br>
+            <button type="button" class="btn btn-info my-2">Pat</button><br>
+            <button type="button" class="btn btn-info my-2">Will</button><br>
+            <button type="button" class="btn btn-info my-2">Kayla</button><br>
+            <button type="button" class="btn btn-info my-2">Angelo</button><br>
+        </div>
+        <div class="col">
+            <h3 class="text-center">Abilities</h3>
+        </div>
+    </div>
+    <div class="text-center">
+        <h1 style="display: inline">Time Remaining:</h1>
+        <output id="time_output"></output>
+        <br>
+        <button type="button" class="btn btn-warning" onclick="pause()" id="pause_button">Pause</button>
+    </div>
+    <div class="text-center my-3">
+        <h3>Set Turn</h3>
+        <button type="button" class="btn btn-info my-2" onclick="setTurn('Derek')">Derek</button>
+        <button type="button" class="btn btn-info my-2" onclick="setTurn('Keith')">Keith</button>
+        <button type="button" class="btn btn-info my-2" onclick="setTurn('Mitch')">Mitch</button>
+        <button type="button" class="btn btn-info my-2" onclick="setTurn('Pat')">Pat</button>
+        <button type="button" class="btn btn-info my-2" onclick="setTurn('Will')">Will</button>
+        <button type="button" class="btn btn-info my-2" onclick="setTurn('Kayla')">Kayla</button>
+        <button type="button" class="btn btn-info my-2" onclick="setTurn('Angelo')">Angelo</button>
+    </div>
+    <div class="text-center my-3">
+        <h3>Change Initiative</h3>
+    </div>
+</div>
+
+<script>
+
+    let time;
+    let turnOrder = ["Derek", "Keith", "Mitch", "Pat", "Will", "Kayla", "Angelo"];
+    let turnIndex = 0;
+    let paused = false;
+
+    init();
+
+    function init() {
+        time = 45;
+        document.getElementById("time_output").innerHTML = time;
+        document.getElementById("player_turn").innerHTML = turnOrder[turnIndex];
+
+        setTimeout(countdown, 1000);
+
+    }
+    
+    function setTurn(name) {
+        time = 46;
+        turnIndex = turnOrder.indexOf(name);
+        document.getElementById("player_turn").innerHTML = turnOrder[turnIndex];
+    }
+
+    function countdown() {
+
+        if (paused) {
+            return;
+        }
+
+        time -= 1;
+        if (time < 0) {
+            turnIndex = (turnIndex + 1) % turnOrder.length;
+            document.getElementById("player_turn").innerHTML = turnOrder[turnIndex];
+            time = 45;
+        }
+        document.getElementById("time_output").innerHTML = time;
+
+        setTimeout(countdown, 1000);
+    }
+
+    function pause() {
+        paused = !paused;
+
+        if (paused) {
+            document.getElementById("pause_button").innerHTML = "Play";
+        } else {
+            document.getElementById("pause_button").innerHTML = "Pause";
+            setTimeout(countdown, 1000);
+        }
+
+    }
+
+</script>
+
+
+{% endblock %}
